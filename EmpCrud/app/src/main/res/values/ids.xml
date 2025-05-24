@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="multilineAddress" type="id" />
+    <item name="editTextDob" type="id" />
+    <item name="textname" type="id" />
+    <item name="textEmail" type="id" />
+    <item name="nameText" type="id" />
+    <item name="emailText" type="id" />
+    <item name="designationText" type="id" />
+    <item name="updateButton" type="id" />
+    <item name="deleteButton" type="id" />
+</resources>

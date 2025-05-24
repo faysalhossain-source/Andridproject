@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">EmpCrud</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="address">Address</string>
+    <string name="age">age</string>
+    <string name="designation">Designation</string>
+    <string name="e_mail">E-mail</string>
+    <string name="name">Name</string>
+    <string name="salary">salary</string>
+    <string name="save">Save</string>
+    <string name="button">Save</string>
+</resources>
