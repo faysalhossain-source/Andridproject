@@ -87,47 +87,58 @@
         />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/datelayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+        android:id="@+id/dateLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/dob"
+        app:endIconDrawable="@drawable/baseline_calendar_month_24"
+        app:endIconMode="custom"
+        app:endIconTint="@color/teal_700"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/multilineAddress">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editTextDob"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="none"
+            android:minHeight="48dp"
+            android:paddingVertical="12dp"
+            android:textSize="16sp" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <EditText
+        android:id="@+id/decimalSalary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:hint="@string/dob"
-        android:inputType="date"
-
-        app:endIconMode="custom"
-        app:endIconTint="@color/teal_700"
+        android:hint="@string/salary"
+        android:inputType="numberDecimal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.556" />
-
-    <EditText
-        android:id="@+id/editTextNumberDecimal"
-        android:layout_width="303dp"
-        android:layout_height="64dp"
-        android:layout_marginBottom="220dp"
-        android:ems="10"
-        android:hint="Salary"
-        android:inputType="numberDecimal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.342"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/dateLayout" />
 
     <Button
-        android:id="@+id/button"
-        android:layout_width="146dp"
-        android:layout_height="48dp"
-        android:hint="Save"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/btnSave"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/save"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.339"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toBottomOf="@+id/decimalSalary" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
