@@ -1,5 +1,6 @@
 package com.faysal.jobkhujibd2.activity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -16,7 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.faysal.jobkhujibd2.R;
 import com.faysal.jobkhujibd2.model.User;
-import com.google.firebase.appdistribution.gradle.ApiService;
+import com.faysal.jobkhujibd2.service.ApiService;
 
 import java.util.Objects;
 
@@ -32,6 +33,7 @@ public class AddUserActivity extends AppCompatActivity {
     private Button btnSave;
     private ApiService apiService;
 
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

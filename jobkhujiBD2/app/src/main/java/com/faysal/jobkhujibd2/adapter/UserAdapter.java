@@ -1,9 +1,5 @@
 package com.faysal.jobkhujibd2.adapter;
 
-
-
-
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -37,7 +33,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     private List<User> userList;
     private ApiService apiService;
 
-    public UserAdapter(List<User> userList) {
+    public UserAdapter(Context context, List<User> userList) {
         this.context = context;
         this.userList = userList;
         this.apiService = ApiClient.getApiService();
@@ -48,7 +44,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.item_User, parent, false);
+                .inflate(R.layout.item_user, parent, false);
 
         return new UserViewHolder(view);
     }
@@ -56,22 +52,28 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
-        holder.nameText.setText(user.getName());
-        holder.emailText.setText(user.getEmail());
-       // holder.roleText.setText(user.getRole());
 
+        // Display all fields
+        holder.firstNameText.setText("First Name: " + user.getFirstName());
+        holder.lastNameText.setText("Last Name: " + user.getLastName());
+        holder.phoneNumberText.setText("Phone: " + user.getPhoneNumber());
+        holder.genderText.setText("Gender: " + user.getGender());
+        holder.ageText.setText("Age: " + (user.getAge() != null ? user.getAge().toString() : "N/A"));
+
+        // Update button
         holder.updateButton.setOnClickListener(v -> {
-            Log.d("Update", "Update clicked for " + user.getName());
+            Log.d("Update", "Update clicked for " + user.getFirstName());
             Intent intent = new Intent(context, AddUserActivity.class);
             intent.putExtra("user", new Gson().toJson(user));
             context.startActivity(intent);
         });
 
+        // Delete button
         holder.deleteButton.setOnClickListener(v -> {
-            Log.d("Delete", "Delete clicked for " + user.getName());
+            Log.d("Delete", "Delete clicked for " + user.getFirstName());
             new AlertDialog.Builder(context)
                     .setTitle("Delete")
-                    .setMessage("Are you sure you want to delete " + user.getName() + "?")
+                    .setMessage("Are you sure you want to delete " + user.getFirstName() + "?")
                     .setPositiveButton("Yes", (dialog, which) -> apiService.deleteUser(user.getId())
                             .enqueue(new Callback<>() {
                                 @Override
@@ -105,14 +107,16 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     public static class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView nameText, emailText, roleText;
+        TextView firstNameText, lastNameText, phoneNumberText, genderText, ageText;
         Button updateButton, deleteButton;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameText = itemView.findViewById(R.id.nameText);
-            emailText = itemView.findViewById(R.id.emailText);
-            roleText = itemView.findViewById(R.id.roleText);
+            firstNameText = itemView.findViewById(R.id.firstNameText);
+            lastNameText = itemView.findViewById(R.id.textLastName);
+            phoneNumberText = itemView.findViewById(R.id.textPhoneNumber);
+            genderText = itemView.findViewById(R.id.textGender);
+            ageText = itemView.findViewById(R.id.numberAge);
             updateButton = itemView.findViewById(R.id.updateButton);
             deleteButton = itemView.findViewById(R.id.deleteButton);
         }
