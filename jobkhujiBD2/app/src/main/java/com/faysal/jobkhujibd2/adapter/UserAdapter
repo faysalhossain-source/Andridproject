@@ -1,0 +1,115 @@
+
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.employeecrudwithapi.R;
+import com.example.employeecrudwithapi.activity.AddUserActivity;
+import com.example.employeecrudwithapi.model.User;
+import com.example.employeecrudwithapi.service.ApiService;
+import com.example.employeecrudwithapi.util.ApiClient;
+import com.google.gson.Gson;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
+
+    private Context context;
+    private List<User> userList;
+    private ApiService apiService;
+
+    public UserAdapter(Context context, List<User> userList) {
+        this.context = context;
+        this.userList = userList;
+        this.apiService = ApiClient.getApiService();
+    }
+
+    @NonNull
+    @Override
+    public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.item_user, parent, false);
+
+        return new UserViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
+        User user = userList.get(position);
+        holder.nameText.setText(user.getName());
+        holder.emailText.setText(user.getEmail());
+        holder.roleText.setText(user.getRole());
+
+        holder.updateButton.setOnClickListener(v -> {
+            Log.d("Update", "Update clicked for " + user.getName());
+            Intent intent = new Intent(context, AddUserActivity.class);
+            intent.putExtra("user", new Gson().toJson(user));
+            context.startActivity(intent);
+        });
+
+        holder.deleteButton.setOnClickListener(v -> {
+            Log.d("Delete", "Delete clicked for " + user.getName());
+            new AlertDialog.Builder(context)
+                    .setTitle("Delete")
+                    .setMessage("Are you sure you want to delete " + user.getName() + "?")
+                    .setPositiveButton("Yes", (dialog, which) -> apiService.deleteUser(user.getId())
+                            .enqueue(new Callback<>() {
+                                @Override
+                                public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+                                    if (response.isSuccessful()) {
+                                        int adapterPosition = holder.getAdapterPosition();
+                                        if (adapterPosition != RecyclerView.NO_POSITION) {
+                                            userList.remove(adapterPosition);
+                                            notifyItemRemoved(adapterPosition);
+                                            notifyItemRangeChanged(adapterPosition, userList.size());
+                                            Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
+                                        }
+                                    } else {
+                                        Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
+                                    Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }))
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return userList.size();
+    }
+
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
+        TextView nameText, emailText, roleText;
+        Button updateButton, deleteButton;
+
+        public UserViewHolder(@NonNull View itemView) {
+            super(itemView);
+            nameText = itemView.findViewById(R.id.nameText);
+            emailText = itemView.findViewById(R.id.emailText);
+            roleText = itemView.findViewById(R.id.roleText);
+            updateButton = itemView.findViewById(R.id.updateButton);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
+        }
+    }
+}
