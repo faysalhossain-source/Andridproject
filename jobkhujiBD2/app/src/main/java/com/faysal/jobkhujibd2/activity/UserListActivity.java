@@ -32,7 +32,7 @@ public class UserListActivity extends AppCompatActivity {
     private static final String TAG = "UserListActivity";
     private RecyclerView recyclerView;
     private UserAdapter userAdapter;
-    private List<User> userList = new ArrayList<>();
+    private final List<User> userList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,5 +97,9 @@ public class UserListActivity extends AppCompatActivity {
                 Log.e(TAG, "API Call Failed: " + t.getMessage());
             }
         });
+    }
+
+    public List<User> getUserList() {
+        return userList;
     }
 }

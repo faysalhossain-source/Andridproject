@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">jobkhujiBD2</string>
+
+ <!--User Fields-->
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="gender">Gender</string>
+    <string name="age">Age</string>
+
+    <!--Buttons-->
+    <string name="save">Save</string>
+    <string name="update">Update</string>
+    <string name="delete">Delete</string>
+    <string name="list_page">List Page</string>
+    <string name="add_user">Add User</string>
 </resources>
