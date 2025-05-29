@@ -1,5 +1,8 @@
 package com.faysal.jobkhujibd2.util;
 
+
+
+
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.faysal.jobkhujibd2.model.User;
@@ -38,3 +41,5 @@ public class UserDiffCallback extends DiffUtil.Callback {
         return oldList.get(oldItemPosition).equals(newList.get(newItemPosition));
     }
 }
+
+

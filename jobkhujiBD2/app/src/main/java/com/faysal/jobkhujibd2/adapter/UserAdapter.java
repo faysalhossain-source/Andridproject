@@ -1,6 +1,9 @@
-
-
 package com.faysal.jobkhujibd2.adapter;
+
+
+
+
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -15,11 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.employeecrudwithapi.R;
-import com.example.employeecrudwithapi.activity.AddUserActivity;
-import com.example.employeecrudwithapi.model.User;
-import com.example.employeecrudwithapi.service.ApiService;
-import com.example.employeecrudwithapi.util.ApiClient;
+import com.faysal.jobkhujibd2.R;
+import com.faysal.jobkhujibd2.activity.AddUserActivity;
+import com.faysal.jobkhujibd2.model.User;
+import com.faysal.jobkhujibd2.service.ApiService;
+import com.faysal.jobkhujibd2.util.ApiClient;
 import com.google.gson.Gson;
 
 import java.util.List;
@@ -34,7 +37,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     private List<User> userList;
     private ApiService apiService;
 
-    public UserAdapter(Context context, List<User> userList) {
+    public UserAdapter(List<User> userList) {
         this.context = context;
         this.userList = userList;
         this.apiService = ApiClient.getApiService();
@@ -45,7 +48,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public UserViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
-                .inflate(R.layout.item_user, parent, false);
+                .inflate(R.layout.item_User, parent, false);
 
         return new UserViewHolder(view);
     }
@@ -55,7 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = userList.get(position);
         holder.nameText.setText(user.getName());
         holder.emailText.setText(user.getEmail());
-        holder.roleText.setText(user.getRole());
+       // holder.roleText.setText(user.getRole());
 
         holder.updateButton.setOnClickListener(v -> {
             Log.d("Update", "Update clicked for " + user.getName());

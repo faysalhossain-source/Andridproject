@@ -14,6 +14,9 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
+import com.faysal.jobkhujibd2.R;
+import com.faysal.jobkhujibd2.model.User;
+import com.google.firebase.appdistribution.gradle.ApiService;
 
 import java.util.Objects;
 
@@ -33,7 +36,7 @@ public class AddUserActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_employee);
+        setContentView(R.layout.activity_add_user);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -82,7 +85,7 @@ public class AddUserActivity extends AppCompatActivity {
         user.setGender(gender);
         user.setAge(age);
 
-        Call<User> call = apiService.saveEmployee(User);
+        Call<User> call = apiService.saveUser(user);
 
         call.enqueue(new Callback<>() {
             @Override
@@ -90,7 +93,7 @@ public class AddUserActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Toast.makeText(AddUserActivity.this, "Employee saved successfully!", Toast.LENGTH_SHORT).show();
                     clearForm();
-                    Intent intent = new Intent(AddUserActivity.this, ListUserActivity.class);
+                    Intent intent = new Intent(AddUserActivity.this, UserListActivity.class);
                     startActivity(intent);
                     finish();
                 } else {

@@ -1,6 +1,5 @@
 package com.faysal.jobkhujibd2.activity;
 
-
 import android.os.Bundle;
 import android.util.Log;
 
@@ -13,10 +12,12 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.employeecrudwithapi.R;
-import com.example.employeecrudwithapi.adapter.UserAdapter;
-import com.example.employeecrudwithapi.model.User;
-import com.example.employeecrudwithapi.service.ApiService;
+
+import com.faysal.jobkhujibd2.R;
+import com.faysal.jobkhujibd2.adapter.UserAdapter;
+import com.faysal.jobkhujibd2.model.User;
+import com.faysal.jobkhujibd2.service.ApiService;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UserListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_user_list);
+        setContentView(R.layout.activity_list_user);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -81,8 +82,8 @@ public class UserListActivity extends AppCompatActivity {
                     userList.addAll(response.body());
                     userAdapter.notifyDataSetChanged();
                     for (User user : response.body()) {
-                        Log.d(TAG, "ID: " + user.getId() +
-                                ", Name: " + user.getFirstName() + " " + user.getLastName() +
+                        Log.d(TAG, ", Name: " + user.getFirstName() +
+                                " " + user.getLastName() +
                                 ", Phone: " + user.getPhoneNumber() +
                                 ", Gender: " + user.getGender() +
                                 ", Age: " + user.getAge());
