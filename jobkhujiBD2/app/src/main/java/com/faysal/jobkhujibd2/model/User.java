@@ -1,11 +1,30 @@
 package com.faysal.jobkhujibd2.model;
 
 public class User {
+    private int id;
     private String firstName;
     private String lastName;
     private String phoneNumber;
     private String gender;
-    private Integer age;
+    private int age;
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    private String role;
 
     public User() {
 
@@ -39,15 +58,16 @@ public class User {
         return gender;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 }

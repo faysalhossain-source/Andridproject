@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.faysal.jobkhujibd2.R;
 import com.faysal.jobkhujibd2.model.User;
 import com.faysal.jobkhujibd2.service.ApiService;
+import com.faysal.jobkhujibd2.util.ApiClient;
 
 import java.util.Objects;
 
@@ -54,16 +55,18 @@ public class AddUserActivity extends AppCompatActivity {
         textLastName = findViewById(R.id.textLastName);
         textPhoneNumber = findViewById(R.id.textPhoneNumber);
         textGender = findViewById(R.id.textGender);
-        textAge = findViewById(R.id.textAge);
+        textAge = findViewById(R.id.numberAge);
         btnSave = findViewById(R.id.btnSave);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8081/") // Emulator
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://10.0.2.2:8081/") // Emulator
+//                .baseUrl("http://10.0.2.2:8081/") // Emulator
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
 
-        apiService = retrofit.create(ApiService.class);
+//        apiService = retrofit.create(ApiService.class);
 
+        apiService = ApiClient.getApiService();
         btnSave.setOnClickListener(v -> saveEmployee());
     }
 
@@ -86,6 +89,7 @@ public class AddUserActivity extends AppCompatActivity {
         user.setPhoneNumber(phoneNumber);
         user.setGender(gender);
         user.setAge(age);
+        user.setRole("ADMIN");
 
         Call<User> call = apiService.saveUser(user);
 
