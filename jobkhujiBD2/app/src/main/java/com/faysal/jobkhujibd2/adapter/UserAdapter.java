@@ -58,7 +58,8 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         holder.lastNameText.setText("Last Name: " + user.getLastName());
         holder.phoneNumberText.setText("Phone: " + user.getPhoneNumber());
         holder.genderText.setText("Gender: " + user.getGender());
-        holder.ageText.setText("Age: " + (user.getAge() != null ? user.getAge().toString() : "N/A"));
+//        holder.ageText.setText("Age: " + (user.getAge() != null ? user.getAge().toString() : "N/A"));
+        holder.ageText.setText("Age: " + user.getAge());
 
         // Update button
         holder.updateButton.setOnClickListener(v -> {

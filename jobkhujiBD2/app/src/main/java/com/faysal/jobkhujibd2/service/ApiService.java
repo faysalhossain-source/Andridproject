@@ -18,10 +18,10 @@ import retrofit2.http.Path;
 
 public interface ApiService {
 
-    @POST("user")
+    @POST("api/users")
     Call<User> saveUser(@Body User user);
 
-    @GET("user")
+    @GET("api/users")
     Call<List<User>> getAllUsers();
 
     @GET("user/{id}")
@@ -30,6 +30,6 @@ public interface ApiService {
     @PUT("user/{id}")
     Call<User> updateUser(@Path("id") int id, @Body User user);
 
-    @DELETE("user/{id}")
+    @DELETE("api/users/{id}")
     Call<Void> deleteUser(@Path("id") int id);
 }

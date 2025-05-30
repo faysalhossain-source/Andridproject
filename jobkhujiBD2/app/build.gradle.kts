@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.faysal.jobkhujibd2"
-        minSdk = 33
+        minSdk = 29
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -38,10 +38,7 @@ dependencies {
     implementation(libs.activity)
     implementation(libs.constraintlayout)
     implementation(libs.converter.gson)
-    implementation(libs.logging.interceptor)
     implementation(libs.retrofit)
-    implementation(libs.firebase.appdistribution.gradle)
-    implementation(libs.firebase.firestore)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)

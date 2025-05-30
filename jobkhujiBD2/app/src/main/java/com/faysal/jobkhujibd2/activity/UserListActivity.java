@@ -17,6 +17,7 @@ import com.faysal.jobkhujibd2.R;
 import com.faysal.jobkhujibd2.adapter.UserAdapter;
 import com.faysal.jobkhujibd2.model.User;
 import com.faysal.jobkhujibd2.service.ApiService;
+import com.faysal.jobkhujibd2.util.ApiClient;
 
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class UserListActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        userAdapter = new UserAdapter(userList);
+        userAdapter = new UserAdapter(this, userList);
         recyclerView = findViewById(R.id.userRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(userAdapter);
@@ -66,12 +67,13 @@ public class UserListActivity extends AppCompatActivity {
     }
 
     private void fetchUsers() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:8081/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl("http://10.0.2.2:8081/")
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
 
-        ApiService apiService = retrofit.create(ApiService.class);
+//        ApiService apiService = retrofit.create(ApiService.class);
+        ApiService apiService = ApiClient.getApiService();
         Call<List<User>> call = apiService.getAllUsers();
 
         call.enqueue(new Callback<>() {
