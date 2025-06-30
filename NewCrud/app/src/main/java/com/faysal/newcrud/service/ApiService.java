@@ -1,32 +1,27 @@
 package com.faysal.newcrud.service;
 
+
+
+
+
+
+
 import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
+import retrofit2.http.*;
 
-public class ApiService {
+public interface ApiService {
 
-    public interface ApiService {
+    @GET("employees")
+    Call<List<Employee>> getEmployees();
 
-        @POST("employee")
-        Call<Employee> saveEmployee(@Body Employee employee);
+    @POST("employees")
+    Call<Employee> addEmployee(@Body Employee employee);
 
-        @GET("employee")
-        Call<List<Employee>> getAllEmployee();
+    @PUT("employees/{id}")
+    Call<Employee> updateEmployee(@Path("id") int id, @Body Employee employee);
 
-        @GET("employee/{id}")
-        Call<Employee> getEmployeeById(@Path("id") int id);
-
-        @PUT("employee/{id}")
-        Call<Employee> updateEmployee(@Path("id") int id, @Body Employee employee);
-
-        @DELETE("employee/{id}")
-        Call<Void> deleteEmployee(@Path("id") int id);
-    }
+    @DELETE("employees/{id}")
+    Call<Void> deleteEmployee(@Path("id") int id);
 }

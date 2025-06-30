@@ -1,103 +1,60 @@
+// EmployeeAdapter.java
 package com.faysal.newcrud.adapter;
+
+
+
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.faysal.newcrud.Activity.AddEmployeeActivity;
-import com.faysal.newcrud.R;
-import com.faysal.newcrud.service.ApiService;
-import com.faysal.newcrud.util.ApiClient;
-import com.google.gson.Gson;
+import com.example.employeecrud.R;
+import com.example.employeecrud.model.Employee;
+import com.example.employeecrud.ui.AddEditEmployeeActivity;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    private Context context;
     private List<Employee> employeeList;
-    private ApiService apiService;
+    private Context context;
 
-    public <Employee> EmployeeAdapter(Context context, List<Employee> employeeList) {
+    public EmployeeAdapter(Context context, List<Employee> employees) {
         this.context = context;
-        this.employeeList = employeeList;
-        this.apiService = ApiClient.getApiService();
+        this.employeeList = employees;
     }
 
     @NonNull
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater
-                .from(parent.getContext())
-                .inflate(R.layout.item_employee, parent, false);
-
+        View view = LayoutInflater.from(context).inflate(R.layout.item_employee, parent, false);
         return new EmployeeViewHolder(view);
-    }
-
-    @NonNull
-    @Override
-    public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
     }
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
-        Employee employee = employeeList.get(position);
-        holder.nameText.setText(employee.getName());
-        holder.emailText.setText(employee.getEmail());
-        holder.designationText.setText(employee.getDesignation());
+        Employee emp = employeeList.get(position);
+        holder.name.setText(emp.getName());
+        holder.email.setText(emp.getEmail());
+        holder.designation.setText(emp.getDesignation());
 
-        holder.updateButton.setOnClickListener(v -> {
-            Log.d("Update", "Update clicked for " + employee.getName());
-            Intent intent = new Intent(context, AddEmployeeActivity.class);
-            intent.putExtra("employee", new Gson().toJson(employee));
+        holder.btnEdit.setOnClickListener(v -> {
+            Intent intent = new Intent(context, AddEditEmployeeActivity.class);
+            intent.putExtra("employee", emp);
             context.startActivity(intent);
         });
 
-        holder.deleteButton.setOnClickListener(v -> {
-            Log.d("Delete", "Delete clicked for " + employee.getName());
-            new AlertDialog.Builder(context)
-                    .setTitle("Delete")
-                    .setMessage("Are you sure you want to delete " + employee.getName() + "?")
-                    .setPositiveButton("Yes",
-                            (dialog, which) -> apiService.deleteEmployee(employee.getId())
-                                    .enqueue(new Callback<>() {
-                                        @Override
-                                        public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
-                                            if (response.isSuccessful()) {
-                                                int adapterPosition = holder.getAdapterPosition();
-                                                if (adapterPosition != RecyclerView.NO_POSITION) {
-                                                    employeeList.remove(adapterPosition);
-                                                    notifyItemRemoved(adapterPosition);
-                                                    notifyItemRangeChanged(adapterPosition, employeeList.size());
-                                                    Toast.makeText(context, "Deleted successfully", Toast.LENGTH_SHORT).show();
-                                                }
-                                            } else {
-                                                Toast.makeText(context, "Failed to delete", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                                            Toast.makeText(context, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }))
-                    .setNegativeButton("Cancel", null)
-                    .show();
+        holder.btnDelete.setOnClickListener(v -> {
+            if (context instanceof EmployeeListActivity) {
+                ((EmployeeListActivity) context).deleteEmployee(emp.getId(), position);
+            }
         });
     }
 
@@ -107,19 +64,16 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     }
 
     public static class EmployeeViewHolder extends RecyclerView.ViewHolder {
-        TextView nameText, emailText, designationText;
-        Button updateButton, deleteButton;
+        TextView name, email, designation;
+        Button btnEdit, btnDelete;
 
         public EmployeeViewHolder(@NonNull View itemView) {
             super(itemView);
-            nameText = itemView.findViewById(R.id.nameText);
-            emailText = itemView.findViewById(R.id.emailText);
-            designationText = itemView.findViewById(R.id.designationText);
-            updateButton = itemView.findViewById(R.id.updateButton);
-            deleteButton = itemView.findViewById(R.id.deleteButton);
+            name = itemView.findViewById(R.id.textName);
+            email = itemView.findViewById(R.id.textEmail);
+            designation = itemView.findViewById(R.id.textDesignation);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
     }
-}
-
-
 }

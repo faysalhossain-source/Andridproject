@@ -10,4 +10,5 @@
     <item name="updateButton" type="id" />
     <item name="deleteButton" type="id" />
     <item name="datelayout" type="id" />
+    <item name="numberAge" type="id" />
 </resources>

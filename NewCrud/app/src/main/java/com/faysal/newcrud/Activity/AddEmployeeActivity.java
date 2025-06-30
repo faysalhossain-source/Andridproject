@@ -1,174 +1,98 @@
+// ✅ Full CRUD - AddEmployeeActivity.java
 package com.faysal.newcrud.Activity;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
+
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 
 import com.faysal.newcrud.R;
-
 import com.faysal.newcrud.service.ApiService;
 import com.faysal.newcrud.util.ApiClient;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AddEmployeeActivity extends AppCompatActivity {
+public class AddEditEmployeeActivity extends AppCompatActivity {
 
-    private TextInputEditText editTextDob;
-    private TextInputLayout dateLayout;
-    private EditText textName, textEmail, textDesignation, numberAge, multilineAddress, decimalSalary;
+    private EditText editName, editEmail, editDesignation;
     private Button btnSave;
+    private ApiService apiService;
 
-    private int employeeId = -1;
+    private Employee employee;
     private boolean isEditMode = false;
-    private ApiService apiService = ApiClient.getApiService();
 
-
-    @SuppressLint({"MissingInflatedId", "RestrictedApi"})
     @Override
-    protected <Employee> void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_add_employee);
+        setContentView(R.layout.activity_add_edit_employee);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-        }
-
-        // View binding
-        editTextDob = findViewById(R.id.editTextDob);
-        dateLayout = findViewById(R.id.datelayout);
-        textName = findViewById(R.id.textName);
-        textEmail = findViewById(R.id.textEmail);
-        textDesignation = findViewById(R.id.textDesignation);
-        numberAge = findViewById(R.id.NumberAge);
-        multilineAddress = findViewById(R.id.multilineAddress);
-        decimalSalary = findViewById(R.id.decimalSalary);
+        editName = findViewById(R.id.editName);
+        editEmail = findViewById(R.id.editEmail);
+        editDesignation = findViewById(R.id.editDesignation);
         btnSave = findViewById(R.id.btnSave);
 
-        Intent intent = getIntent();
-        if (intent.hasExtra("employee")) {
-            Employee employee = new Gson().fromJson(intent.getStringExtra("employee"), Employee.class);
-            employeeId = employee.getClass().getModifiers();
+        apiService = ApiClient.getClient().create(ApiService.class);
 
-            textName.setText(employee.getName());
-            textEmail.setText(employee.getEmail());
-            textDesignation.setText(employee.getDesignation());
-            numberAge.setText(String.valueOf(employee.getAge()));
-            multilineAddress.setText(employee.getAddress());
-            editTextDob.setText(employee.getDob());
-            decimalSalary.setText(String.valueOf(employee.getSalary()));
-
-            btnSave.setText(R.string.update);
-            isEditMode = true;
+        if (getIntent().hasExtra("employee")) {
+            employee = (Employee) getIntent().getSerializableExtra("employee");
+            if (employee != null) {
+                isEditMode = true;
+                editName.setText(employee.getName());
+                editEmail.setText(employee.getEmail());
+                editDesignation.setText(employee.getDesignation());
+            }
+        } else {
+            employee = new Employee();
         }
 
-        btnSave.setOnClickListener(v -> saveOrUpdateEmployee());
-        dateLayout.setEndIconOnClickListener(v -> showMaterialDatePicker());
+        btnSave.setOnClickListener(v -> saveEmployee());
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
+    private void saveEmployee() {
+        String name = editName.getText().toString().trim();
+        String email = editEmail.getText().toString().trim();
+        String designation = editDesignation.getText().toString().trim();
 
-    private void showMaterialDatePicker() {
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-                .setTitleText("Select Date of Birth")
-                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                .build();
-
-        datePicker.show(getSupportFragmentManager(), "DOB_PICKER");
-
-        datePicker.addOnPositiveButtonClickListener(selection -> {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-            String dob = sdf.format(new Date(selection));
-            editTextDob.setText(dob);
-        });
-    }
-
-    private void saveOrUpdateEmployee() {
-        String name = textName.getText().toString().trim();
-        String email = textEmail.getText().toString().trim();
-        String designation = textDesignation.getText().toString().trim();
-        int age = Integer.parseInt(numberAge.getText().toString().trim());
-        String address = multilineAddress.getText().toString().trim();
-        String dobString = editTextDob.getText().toString().trim();
-        double salary = Double.parseDouble(decimalSalary.getText().toString().trim());
-
-        Employee employee = new Employee();
-        if (isEditMode) {
-            employee.setId(employeeId);
+        if (TextUtils.isEmpty(name) || TextUtils.isEmpty(email) || TextUtils.isEmpty(designation)) {
+            Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         employee.setName(name);
         employee.setEmail(email);
         employee.setDesignation(designation);
-        employee.setAge(age);
-        employee.setAddress(address);
-        employee.setDob(dobString);
-        employee.setSalary(salary);
 
-        Call<Employee> call = isEditMode
-                ? apiService.updateEmployee(employeeId, employee)
-                : apiService.saveEmployee(employee);
+        Call<Employee> call;
+        if (isEditMode) {
+            call = apiService.updateEmployee(employee.getId(), employee);
+        } else {
+            call = apiService.addEmployee(employee);
+        }
 
         call.enqueue(new Callback<Employee>() {
             @Override
             public void onResponse(@NonNull Call<Employee> call, @NonNull Response<Employee> response) {
                 if (response.isSuccessful()) {
-                    String message = isEditMode ? "Employee Updated Successfully!" : "Employee Saved Successfully!";
-                    Toast.makeText(AddEmployeeActivity.this, message, Toast.LENGTH_SHORT).show();
-                    clearForm();
-                    startActivity(new Intent(AddEmployeeActivity.this, EmployeeListActivity.class));
+                    Toast.makeText(AddEditEmployeeActivity.this, isEditMode ? "Updated!" : "Added!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK);
                     finish();
                 } else {
-                    Toast.makeText(AddEmployeeActivity.this, "Failed to save employee: " + response.message(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddEditEmployeeActivity.this, "Failed: " + response.message(), Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Employee> call, @NonNull Throwable t) {
-                Toast.makeText(AddEmployeeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddEditEmployeeActivity.this, "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void clearForm() {
-        textName.setText("");
-        textEmail.setText("");
-        textDesignation.setText("");
-        numberAge.setText("");
-        multilineAddress.setText("");
-        editTextDob.setText("");
-        decimalSalary.setText("");
     }
 }
